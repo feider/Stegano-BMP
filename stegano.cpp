@@ -61,7 +61,7 @@ bool encrypt(BMP &bmp, const char * src)
 	unsigned int length = bmp.TellWidth();
 	if(free_chars<strlen(src))
 	{
-		printf("Image is too small. \nIt needs at least %i more pixels\n", (length-free_chars)*2);
+		printf("Image is too small. \nIt needs at least %i more pixels\n", (strlen(src)-free_chars)*2);
 		return false;
 	}
 

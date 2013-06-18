@@ -17,3 +17,7 @@ easybmp.o: easybmp/EasyBMP.cpp
 install:
 	cp -f encrypt /usr/local/bin/
 	cp -f decrypt /usr/local/bin/
+
+uninstall:
+	rm /usr/local/bin/encrypt
+	rm /usr/local/bin/decrypt

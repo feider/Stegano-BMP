@@ -11,10 +11,9 @@
 void charToData(unsigned char data_char, char * return_char)
 {
 	std::bitset<8> bs(data_char);
-	char data[4];
 	for(int i=0; i<4; i++)
 	{
-		data[i] = bs[i*2]*2 + bs[i*2 + 1];
+		return_char[i] = bs[i*2]*2 + bs[i*2 + 1];
 	}
 
 	return;
@@ -48,10 +47,8 @@ unsigned char dataToChar(char * data)
 
 unsigned char encryptChar(unsigned char data_char, char info)
 {
-	printf("%i", data_char);
 	data_char &= UNTOUCHED;
 	data_char += info*TOUCHED;
-	printf(" %i\n", data_char);
 	return data_char;
 }
 
@@ -61,7 +58,7 @@ bool encrypt(BMP &bmp, const char * src)
 {
 	int free_chars = bmp.TellWidth() * bmp.TellHeight();
 	free_chars/=2; // two pixels are needed for one char
-	unsigned char length = strlen(src);
+	unsigned int length = bmp.TellWidth();
 	if(free_chars<length)
 	{
 		printf("Image is too small. \nIt needs at least %i more pixels\n", (length-free_chars)*2);
@@ -77,6 +74,8 @@ bool encrypt(BMP &bmp, const char * src)
 	for(int i=0; src[i]!='\0'; i++)
 	{
 		char data[4];
+		std::string temp = std::to_string(src[i]);
+		std::cout<<temp<<std::endl;
 		charToData(src[i], data);
 		pos = i*2;
 		x = pos%length;
@@ -91,7 +90,6 @@ bool encrypt(BMP &bmp, const char * src)
 		bmp(x, y)->Red =encryptChar(bmp(x, y)->Red, data[2]);
 		bmp(x, y)->Green = encryptChar(bmp(x, y)->Green, data[3]);
 
-		printf("%i\n", bmp(x, y)->Red);
 	}
 	pos--;
 	x = pos%length;
@@ -102,3 +100,42 @@ bool encrypt(BMP &bmp, const char * src)
 	return true;
 }
 
+
+
+
+bool decrypt(BMP &bmp, std::string &info)
+{
+	int max_chars = (bmp.TellWidth() * bmp.TellHeight()) / 2;
+	std::cout<<max_chars<<std::endl;
+	unsigned int length = bmp.TellWidth();
+	for(int pos=0; pos<max_chars; pos+=2)
+	{
+		//std::cout<<pos<<std::endl;
+		int x = pos%length;
+		int y = pos/length;
+		std::bitset<8> bs;
+		bs[0]= (bmp(x, y)->Red & 2)/2;
+		bs[1] = (bmp(x, y)->Red & 1);
+		bs[2] = (bmp(x, y)->Green & 2)/2;
+		bs[3] = (bmp(x, y)->Green & 1);
+		//std::cout<<bmp(x, y)->Red<<std::endl;
+
+		x = (pos+1)%length;
+		y = (pos+1)/length;
+		bs[4]= (bmp(x, y)->Red & 2)/2;
+		bs[5] = (bmp(x, y)->Red & 1);
+		bs[6] = (bmp(x, y)->Green & 2)/2;
+		bs[7] = (bmp(x, y)->Green & 1);
+		std::cout<<std::to_string(bs.to_ulong())<<std::endl;
+		unsigned char data_char = (unsigned char) bs.to_ulong();
+		info += data_char;
+
+		x = pos%length;
+		y = pos/length;
+		if(0==(bmp(x, y)->Blue&1))
+		{
+			return true;
+		}
+	}
+	return true;
+}

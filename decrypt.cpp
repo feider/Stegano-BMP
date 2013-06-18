@@ -21,5 +21,12 @@ int main(int argc, char* argv[])
 			std::cout<<"Usage:\n\tdecrypt <bmpfile>\nOr just:\n\tdecrypt\n";
 			return -1;
 	}
+	bmp.ReadFromFile(in_file.c_str());
+	if(!decrypt(bmp, info))
+	{
+		std::cout<<"Sentence is too big for the image!";
+		return -1;
+	}
+	std::cout<<info;
 	return 0;
 }

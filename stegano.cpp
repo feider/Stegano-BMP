@@ -59,7 +59,7 @@ bool encrypt(BMP &bmp, const char * src)
 	int free_chars = bmp.TellWidth() * bmp.TellHeight();
 	free_chars/=2; // two pixels are needed for one char
 	unsigned int length = bmp.TellWidth();
-	if(free_chars<length)
+	if(free_chars<strlen(src))
 	{
 		printf("Image is too small. \nIt needs at least %i more pixels\n", (length-free_chars)*2);
 		return false;
@@ -67,15 +67,13 @@ bool encrypt(BMP &bmp, const char * src)
 
 
 
-	printf("used: %i/%i chars\n", length, free_chars);
+	printf("used: %i/%i chars\n", strlen(src), free_chars);
 
 
 	int x, y, pos;
 	for(int i=0; src[i]!='\0'; i++)
 	{
 		char data[4];
-		std::string temp = std::to_string(src[i]);
-		std::cout<<temp<<std::endl;
 		charToData(src[i], data);
 		pos = i*2;
 		x = pos%length;
@@ -106,7 +104,6 @@ bool encrypt(BMP &bmp, const char * src)
 bool decrypt(BMP &bmp, std::string &info)
 {
 	int max_chars = (bmp.TellWidth() * bmp.TellHeight()) / 2;
-	std::cout<<max_chars<<std::endl;
 	unsigned int length = bmp.TellWidth();
 	for(int pos=0; pos<max_chars; pos+=2)
 	{
@@ -126,7 +123,6 @@ bool decrypt(BMP &bmp, std::string &info)
 		bs[5] = (bmp(x, y)->Red & 1);
 		bs[6] = (bmp(x, y)->Green & 2)/2;
 		bs[7] = (bmp(x, y)->Green & 1);
-		std::cout<<std::to_string(bs.to_ulong())<<std::endl;
 		unsigned char data_char = (unsigned char) bs.to_ulong();
 		info += data_char;
 

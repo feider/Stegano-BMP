@@ -27,6 +27,6 @@ int main(int argc, char* argv[])
 		std::cout<<"Sentence is too big for the image!";
 		return -1;
 	}
-	std::cout<<info;
+	std::cout<<info<<std::endl;
 	return 0;
 }

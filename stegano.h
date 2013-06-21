@@ -7,5 +7,4 @@ bool encrypt(BMP &bmp, const char * src);
 bool decrypt(BMP &bmp, std::string &info);
 char * decrypt(BMP &bmp);
 
-
 #endif

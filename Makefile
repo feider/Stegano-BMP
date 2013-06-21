@@ -21,3 +21,4 @@ install:
 uninstall:
 	rm /usr/local/bin/encrypt
 	rm /usr/local/bin/decrypt
+

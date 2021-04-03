@@ -15,7 +15,6 @@ void charToData(unsigned char data_char, char * return_char)
 	{
 		return_char[i] = bs[i*2]*2 + bs[i*2 + 1];
 	}
-
 	return;
 }
 

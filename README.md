@@ -1,6 +1,8 @@
 Stegano-BMP
 ===========
 
+This version is old - I rewrote it [here](https://github.com/feider/stegano)
+
 A Program to hide information in bmp-files
 
 To build, run `make`
